@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atividade 3 - Funções</title>
+    <script>
+ 
+        function getDataHora() {
+            return new Date().toLocaleString();
+        }
+
+
+        function validarCPF(cpf) {
+            cpf = cpf.replace(/[^\d]/g, ''); // Remove caracteres não numéricos
+            if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) return false;
+                const cpfArray = cpf.split('').map(Number);
+                let sum = 0;
+                for (let i = 0; i < 9; i++) sum += cpfArray[i] * (10 - i);
+                let digit = sum % 11;
+            if (digit < 2) digit = 0;
+            else digit = 11 - digit;
+                if (digit !== cpfArray[9]) return false;
+                sum = 0;
+                for (let i = 0; i < 10; i++) sum += cpfArray[i] * (11 - i);
+                digit = sum % 11;
+                if (digit < 2) digit = 0;
+                else digit = 11 - digit;
+            return digit === cpfArray[10];
+        }
+
+
+        function validarCNPJ(cnpj) {
+            cnpj = cnpj.replace(/[^\d]/g, ''); // Remove caracteres não numéricos
+            if (cnpj.length !== 14 || /^(\d)\1{13}$/.test(cnpj)) return false;
+            const cnpjArray = cnpj.split('').map(Number);
+            let sum = 0;
+            let size = cnpj.length - 2;
+            let numbers = cnpj.substring(0, size);
+            let digits = cnpj.substring(size);
+            for (let i = size, pos = 0; i >= 1; i--, pos++) sum += numbers[pos] * i;
+            let result = sum % 11 < 2 ? 0 : 11 - (sum % 11);
+            if (result !== cnpjArray[12]) return false;
+            sum = 0;
+            size = size + 1;
+            numbers = cnpj.substring(0, size);
+            for (let i = size, pos = 0; i >= 1; i--, pos++) sum += numbers[pos] * i;
+            result = sum % 11 < 2 ? 0 : 11 - (sum % 11);
+            return result === cnpjArray[13];
+        }
+
+        function valorAbsoluto(numero) {
+            return Math.abs(numero);
+        }
+
+        function arredondarValor(valor, casasDecimais) {
+            return valor.toFixed(casasDecimais);
+        }
+
+        function calcularComissao(valorVenda, taxaComissao) {
+            return valorVenda * (taxaComissao / 100);
+        }
+    </script>
+</head>
+<body>
+    <h1>Exemplos de Funções JavaScript</h1>
+
+    <p>Data e Hora em Tempo Real: <span id="dataHora"></span></p>
+    <p>CPF: <span id="cpfValido"></span></p>
+    <p>CNPJ: <span id="cnpjValido"></span></p>
+    <p>Valor Absoluto: <span id="valorAbsoluto"></span></p>
+    <p>Arredondamento: <span id="valorArredondado"></span></p>
+    <p>Comissão: <span id="comissao"></span></p>
+
+    <script>
+        // Exemplo de uso das funções
+        document.getElementById("dataHora").innerText = getDataHora();
+        document.getElementById("cpfValido").innerText = validarCPF("12345678900") ? "Válido" : "Inválido";
+        document.getElementById("cnpjValido").innerText = validarCNPJ("12345678901234") ? "Válido" : "Inválido";
+        document.getElementById("valorAbsoluto").innerText = valorAbsoluto(-5);
+        document.getElementById("valorArredondado").innerText = arredondarValor(3.14159, 2);
+        document.getElementById("comissao").innerText = calcularComissao(1000, 10);
+    </script>
+</body>
+</html>
